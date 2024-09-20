@@ -1,0 +1,32 @@
+quarkus:
+  datasource:
+    db-kind: h2
+    jdbc:
+      url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    username: sa
+    password: sa
+
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql: true
+
+  smallrye-openapi:
+    path: /openapi
+    info:
+      title: "CRUD API"
+      version: "1.0.0"
+  swagger-ui:
+    always-include: true
+    path: /swagger-ui
+
+  log:
+    level: DEBUG  # Ajusta el nivel de logging global a INFO o DEBUG
+    console:
+      enable: true
+      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{3.}] (%t) %s%e%n"
+    category:
+      "io.quarkus": DEBUG  # Ajusta el nivel de logging para el namespace de Quarkus
+      "org.hibernate": DEBUG  # Logging detallado para las operaciones de Hibernate
+      "org.jboss.resteasy": DEBUG  # Logging para las operaciones REST
