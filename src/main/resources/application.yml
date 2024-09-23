@@ -26,17 +26,20 @@ quarkus:
     always-include: true
     path: /swagger-ui
 
+quarkus:
   log:
-    level: DEBUG
-    console:
-      enable: true
-      format: "%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{3.}] (%t) %s%e%n"
+    level: INFO
     category:
-      "io.quarkus":
-        level: DEBUG
-      "org.hibernate":
-        level: DEBUG
-      "org.jboss.resteasy":
-        level: DEBUG
       "com.dqmdz":
         level: DEBUG
+      "com.fasterxml.jackson":
+        level: DEBUG
+      "io.quarkus":
+        level: INFO
+      "org.hibernate":
+        level: INFO
+    console:
+      format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+      level: DEBUG
+  console:
+    json: false
