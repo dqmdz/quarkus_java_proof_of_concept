@@ -30,7 +30,7 @@ public class PersonaController {
         LOGGER.log(Level.FINE, "Obteniendo todas las personas");
         List<Persona> personas = personaService.findAll();
         try {
-            LOGGER.log(Level.FINE, "Se encontraron {0} personas. Personas {1}", new Object[]{personas.size(), JsonMapper.builder().findAndAddModules().build().writeValueAsString(personas)});
+            LOGGER.log(Level.FINE, "Se encontraron {0} personas. Personas {1}", new Object[]{personas.size(), JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(personas)});
         } catch (JsonProcessingException e) {
             LOGGER.log(Level.SEVERE, "Personas error {0}", e.getMessage());
         }
@@ -44,7 +44,7 @@ public class PersonaController {
         Optional<Persona> persona = personaService.findById(id);
         if (persona.isPresent()) {
             try {
-                LOGGER.log(Level.FINE, "Persona encontrada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona.get()));
+                LOGGER.log(Level.FINE, "Persona encontrada: {0}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(persona.get()));
             } catch (JsonProcessingException e) {
                 LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
             }
@@ -59,13 +59,13 @@ public class PersonaController {
     @Transactional
     public Response createPersona(Persona persona) {
         try {
-            LOGGER.log(Level.FINE, "Creando nueva persona: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
+            LOGGER.log(Level.FINE, "Creando nueva persona: {0}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(persona));
         } catch (JsonProcessingException e) {
             LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
         Persona createdPersona = personaService.create(persona);
         try {
-            LOGGER.log(Level.FINE, "Persona creada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(createdPersona));
+            LOGGER.log(Level.FINE, "Persona creada: {0}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(createdPersona));
         } catch (JsonProcessingException e) {
             LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
@@ -77,7 +77,7 @@ public class PersonaController {
     @Transactional
     public Response updatePersona(@PathParam("id") Long id, Persona updatedPersona) {
         try {
-            LOGGER.log(Level.FINE, "Actualizando persona con id: {0}. Nuevos datos: {1}", new Object[]{id, JsonMapper.builder().findAndAddModules().build().writeValueAsString(updatedPersona)});
+            LOGGER.log(Level.FINE, "Actualizando persona con id: {0}. Nuevos datos: {1}", new Object[]{id, JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(updatedPersona)});
         } catch (JsonProcessingException e) {
             LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
@@ -87,7 +87,7 @@ public class PersonaController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         try {
-            LOGGER.log(Level.FINE, "Persona actualizada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
+            LOGGER.log(Level.FINE, "Persona actualizada: {0}", JsonMapper.builder().findAndAddModules().build().writerWithDefaultPrettyPrinter().writeValueAsString(persona));
         } catch (JsonProcessingException e) {
             LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
