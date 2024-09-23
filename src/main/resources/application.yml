@@ -29,10 +29,10 @@ quarkus:
   log:
     console:
       enable: true
-      level: DEBUG
+      level: FINE
     category:
       "com.dqmdz":
-        level: DEBUG
+        level: FINE
       "com.fasterxml.jackson":
         level: DEBUG
       "io.quarkus":
