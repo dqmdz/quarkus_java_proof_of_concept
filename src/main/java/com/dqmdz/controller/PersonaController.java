@@ -10,30 +10,29 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Path("/personas")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PersonaController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PersonaController.class);
+    private static final Logger LOGGER = Logger.getLogger(PersonaController.class.getName());
 
     @Inject
     PersonaService personaService;
 
     @GET
     public List<Persona> findAll() {
-        LOGGER.debug("Obteniendo todas las personas");
+        LOGGER.log(Level.FINE, "Obteniendo todas las personas");
         List<Persona> personas = personaService.findAll();
         try {
-            LOGGER.debug("Se encontraron {} personas. Personas {}", personas.size(), JsonMapper.builder().findAndAddModules().build().writeValueAsString(personas));
+            LOGGER.log(Level.FINE, "Se encontraron {0} personas. Personas {1}", new Object[]{personas.size(), JsonMapper.builder().findAndAddModules().build().writeValueAsString(personas)});
         } catch (JsonProcessingException e) {
-            LOGGER.debug("Personas error {}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Personas error {0}", e.getMessage());
         }
         return personas;
     }
@@ -41,17 +40,17 @@ public class PersonaController {
     @GET
     @Path("/{id}")
     public Response getPersonaById(@PathParam("id") Long id) {
-        LOGGER.debug("Buscando persona con id: {}", id);
+        LOGGER.log(Level.FINE, "Buscando persona con id: {0}", id);
         Optional<Persona> persona = personaService.findById(id);
         if (persona.isPresent()) {
             try {
-                LOGGER.debug("Persona encontrada: {}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona.get()));
+                LOGGER.log(Level.FINE, "Persona encontrada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona.get()));
             } catch (JsonProcessingException e) {
-                LOGGER.debug("Persona error {}", e.getMessage());
+                LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
             }
             return Response.ok(persona.get()).build();
         } else {
-            LOGGER.debug("No se encontró persona con id: {}", id);
+            LOGGER.log(Level.FINE, "No se encontró persona con id: {0}", id);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -60,15 +59,15 @@ public class PersonaController {
     @Transactional
     public Response createPersona(Persona persona) {
         try {
-            LOGGER.debug("Creando nueva persona: {}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
+            LOGGER.log(Level.FINE, "Creando nueva persona: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
         } catch (JsonProcessingException e) {
-            LOGGER.debug("Persona error {}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
         Persona createdPersona = personaService.create(persona);
         try {
-            LOGGER.debug("Persona creada: {}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(createdPersona));
+            LOGGER.log(Level.FINE, "Persona creada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(createdPersona));
         } catch (JsonProcessingException e) {
-            LOGGER.debug("Persona error {}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
         return Response.status(Response.Status.CREATED).entity(createdPersona).build();
     }
@@ -78,19 +77,19 @@ public class PersonaController {
     @Transactional
     public Response updatePersona(@PathParam("id") Long id, Persona updatedPersona) {
         try {
-            LOGGER.debug("Actualizando persona con id: {}. Nuevos datos: {}", id, JsonMapper.builder().findAndAddModules().build().writeValueAsString(updatedPersona));
+            LOGGER.log(Level.FINE, "Actualizando persona con id: {0}. Nuevos datos: {1}", new Object[]{id, JsonMapper.builder().findAndAddModules().build().writeValueAsString(updatedPersona)});
         } catch (JsonProcessingException e) {
-            LOGGER.debug("Persona error {}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
         Persona persona = personaService.update(id, updatedPersona);
         if (persona == null) {
-            LOGGER.debug("No se encontró persona con id: {} para actualizar", id);
+            LOGGER.log(Level.FINE, "No se encontró persona con id: {0} para actualizar", id);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         try {
-            LOGGER.debug("Persona actualizada: {}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
+            LOGGER.log(Level.FINE, "Persona actualizada: {0}", JsonMapper.builder().findAndAddModules().build().writeValueAsString(persona));
         } catch (JsonProcessingException e) {
-            LOGGER.debug("Persona error {}", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Persona error {0}", e.getMessage());
         }
         return Response.ok(persona).build();
     }
@@ -99,13 +98,13 @@ public class PersonaController {
     @Path("/{id}")
     @Transactional
     public Response deletePersona(@PathParam("id") Long id) {
-        LOGGER.debug("Eliminando persona con id: {}", id);
+        LOGGER.log(Level.FINE, "Eliminando persona con id: {0}", id);
         boolean deleted = personaService.deleteById(id);
         if (deleted) {
-            LOGGER.debug("Persona con id: {} eliminada exitosamente", id);
+            LOGGER.log(Level.FINE, "Persona con id: {0} eliminada exitosamente", id);
             return Response.noContent().build();
         }
-        LOGGER.debug("No se encontró persona con id: {} para eliminar", id);
+        LOGGER.log(Level.FINE, "No se encontró persona con id: {0} para eliminar", id);
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
